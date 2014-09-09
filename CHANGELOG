@@ -1,0 +1,12 @@
+1.04
+- Added RECD fingerprint.
+- Added STRN fingerprint.
+- While displaying modes for the current IP, the modes are now displayed such that more recent modes are displayed toward the left of less recent modes.
+- Fixed an error in BZRO mode documentation. The errornous sentence was: "As an example, if Bizarro mode is enabled after and while Hover mode is enabled, (<) will subtract 1 from the IP's first delta coordinate." It is now corrected to say: "As an example, if Hover mode is enabled after and while Bizarro mode is enabled, (<) will subtract 1 from the IP's first delta coordinate."
+
+1.0.3
+- Added documentation for fingerprints via --finger-doc option.
+- Fixed ORTH 'Z' instruction bug.
+- Added BF93 fingerprint.
+- Added BZRO fingerprint.
+- Added NOP fingerprint.
