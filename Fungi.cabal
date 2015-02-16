@@ -9,7 +9,7 @@ name:                Fungi
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             1.0.5
+version:             1.0.6
 
 -- A short (one-line) description of the package.
 synopsis:            Funge-98 interpreter written in Haskell
@@ -57,6 +57,75 @@ executable fungi
   
   -- Directories containing source files.
   hs-source-dirs:      src
+
+  other-modules:
+        Data.ByteSize
+        Data.Deque
+        Data.History
+        Data.I
+        Data.IntegralLike
+        Data.Labeled
+        Data.LogicalBits
+        Data.MaybeBounded
+        Data.Stack
+        Data.StackSet
+        Data.Tuple.Map
+        Data.Vector
+        Debug.Debug
+        Debug.Debugger
+        Env
+        Fingerprint
+        Fingerprint.BASE
+        Fingerprint.BF93
+        Fingerprint.BOOL
+        Fingerprint.BZRO
+        Fingerprint.CPLI
+        Fingerprint.FIXP
+        Fingerprint.HRTI
+        Fingerprint.MODE
+        Fingerprint.MODU
+        Fingerprint.NOP
+        Fingerprint.NULL
+        Fingerprint.ORTH
+        Fingerprint.RECD
+        Fingerprint.REFC
+        Fingerprint.ROMA
+        Fingerprint.STRN
+        Fungi
+        Instruction
+        Interpreter
+        Ip
+        Math
+        Mode
+        ProcessArgs
+        Random
+        Semantics
+        Space.Cell
+        Space.Space
+        System.IO.Buffering
+        Text.Help.Debug
+        Text.Help.Fingerprint
+        Text.Help.Fungi
+        Text.Help.Fingerprint.BASE
+        Text.Help.Fingerprint.BF93
+        Text.Help.Fingerprint.BOOL
+        Text.Help.Fingerprint.BZRO
+        Text.Help.Fingerprint.CPLI
+        Text.Help.Fingerprint.FIXP
+        Text.Help.Fingerprint.HRTI
+        Text.Help.Fingerprint.MODE
+        Text.Help.Fingerprint.MODU
+        Text.Help.Fingerprint.NOP
+        Text.Help.Fingerprint.NULL
+        Text.Help.Fingerprint.ORTH
+        Text.Help.Fingerprint.RECD
+        Text.Help.Fingerprint.REFC
+        Text.Help.Fingerprint.ROMA
+        Text.Help.Fingerprint.STRN
+        Text.PrettyShow
+        Text.PrintOption
+        UnknownInstruction
+        Version
 
 
 
