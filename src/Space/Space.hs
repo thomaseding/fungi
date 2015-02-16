@@ -55,7 +55,7 @@ data Space i = Space {
   }
   deriving (Show, Eq)
 
-instance (PrettyShow i, Integral i) => PrettyShow (Space i) where
+instance (PrettyShow i, Show i, Integral i) => PrettyShow (Space i) where
   pshow s = concat [ []
     , "(Space"
     , " "

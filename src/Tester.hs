@@ -33,8 +33,8 @@ main = do
     then return $ ExitFailure 1
     else return ExitSuccess
   where
-    goodTestDir = "tests/good/"
-    badTestDir = "tests/bad/"
+    goodTestDir = "../tests/good/"
+    badTestDir = "../tests/bad/"
 
 getDirectoryFilesRecursive :: FilePath -> IO [FilePath]
 getDirectoryFilesRecursive path = do
@@ -76,4 +76,5 @@ test file = do
   return exitCode
   where
     args = ["--debug", "0", file]
+
 

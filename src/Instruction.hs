@@ -71,6 +71,7 @@ module Instruction (
 
   ) where
 
+import Control.Exception (catch)
 import Control.Monad.State.Strict
 
 import Data.ByteSize
@@ -120,7 +121,7 @@ infixr 9 `o`
 o :: (c -> d) -> (a -> b -> c) -> (a -> b -> d)
 o = (.).(.)
 
-numToBool :: (Num a) => a -> Bool
+numToBool :: (Eq a, Num a) => a -> Bool
 numToBool 0 = False
 numToBool _ = True
 
@@ -492,7 +493,7 @@ subtractInstr = op2Instr (-)
 multiplyInstr :: (I i) => Instruction i ()
 multiplyInstr = op2Instr (*)
 
-guardZero :: (Num a) => (a -> a -> a) -> (a -> a -> a)
+guardZero :: (Eq a, Num a) => (a -> a -> a) -> (a -> a -> a)
 guardZero f x y = if y == 0
   then 0
   else f x y

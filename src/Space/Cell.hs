@@ -16,7 +16,7 @@ import Text.PrettyShow
 newtype Cell i = Cell { unCell :: i }
   deriving (Show, Eq, Ord)
 
-instance (Integral i) => PrettyShow (Cell i) where
+instance (Show i, Integral i) => PrettyShow (Cell i) where
   pshow cell = concat [ ""
     , "(Cell "
     , maybe "'\\???'" show . cellToChar $ cell

@@ -15,7 +15,7 @@ import Random
 -----------------------------------------------------------
 
 -- The I type class is intentionally empty. Used to clump the type classes.
-class (Bits i, ByteSize i, Integral i, IntegralLike i, MaybeBounded i, PrettyShow i, Random i, Read i) => I i where
+class (Show i, Bits i, ByteSize i, Integral i, IntegralLike i, MaybeBounded i, PrettyShow i, Random i, Read i) => I i where
 
 instance I Integer where
 instance I Int where
