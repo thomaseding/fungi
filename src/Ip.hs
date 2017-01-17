@@ -44,8 +44,6 @@ import qualified Data.Sequence as Seq
 import Data.Stack
 import Data.Vector
 
-import System.Time (ClockTime)
-
 import Text.PrettyShow
 
 import Mode
@@ -64,7 +62,7 @@ data Ip env i = Ip {
   , getStorageOffset :: !(Vector i)
   , getSemantics :: Semantics env i
   , modes :: StackSet Mode
-  , hrtiMark :: Maybe ClockTime
+  , hrtiMark :: Maybe Integer
   , getRecordings :: Seq (Instruction env i ())
   , getRecordLength :: i
   }

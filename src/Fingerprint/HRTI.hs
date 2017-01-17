@@ -5,7 +5,7 @@ module Fingerprint.HRTI (
 
 import Control.Monad.State.Strict
 
-import System.Time
+import System.CPUTime
 
 import Env
 import Instruction
@@ -25,24 +25,30 @@ semantics = [
   , ('S', sInstr)
   ]
 
+
 ten6 :: Integer
 ten6 = 10 ^ (6 :: Integer)
 
-diffMicro :: (I i) => ClockTime -> ClockTime -> i
-diffMicro x = fromInteger . (`div` ten6) . tdPicosec . diffClockTimes x
+
+toMicro :: (I i) => Integer -> i
+toMicro = fromInteger . (`div` ten6)
+
+
+getPicoTime :: IO Integer
+getPicoTime = getCPUTime
+
 
 gInstr :: (I i) => Instruction i ()
 gInstr = do
   t <- liftIO $ do
-    _ <- getClockTime
-    x <- getClockTime
-    y <- getClockTime
-    return $ diffMicro y x
+    a <- getPicoTime
+    b <- getPicoTime
+    return $ toMicro $ b - a
   pushInstr t
 
 mInstr :: (I i) => Instruction i ()
 mInstr = do
-  t <- liftIO getClockTime
+  t <- liftIO getPicoTime
   modify $ withIp $ \ip -> ip { hrtiMark = Just t }
 
 tInstr :: (I i) => Instruction i ()
@@ -50,15 +56,15 @@ tInstr = do
   ip <- gets currentIp
   case hrtiMark ip of
     Nothing -> reverseInstr
-    Just t -> do
-      t' <- liftIO getClockTime
-      pushInstr $ diffMicro t' t
+    Just past -> do
+      now <- liftIO getPicoTime
+      pushInstr $ toMicro $ now - past
 
 eInstr :: (I i) => Instruction i ()
 eInstr = modify $ withIp $ \ip -> ip { hrtiMark = Nothing }
 
 sInstr :: (I i) => Instruction i ()
 sInstr = do
-  pico <- liftIO $ liftM ctPicosec $ getClockTime >>= toCalendarTime
+  pico <- liftIO getPicoTime
   pushInstr $ fromInteger $ pico `div` ten6
 

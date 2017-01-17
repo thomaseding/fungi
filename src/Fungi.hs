@@ -19,11 +19,11 @@ import Debug.Debugger
 
 import Space.Space
 
-import System.Cmd (system)
 import System.Environment (getArgs, withArgs)
 import System.Exit (ExitCode (..))
 import System.FilePath (takeExtension)
 import System.IO hiding (hGetContents)
+import System.Process (system)
 
 import qualified Text.Help.Fingerprint
 import qualified Text.Help.Fungi

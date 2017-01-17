@@ -88,6 +88,9 @@ import Data.Maybe (isNothing, fromMaybe)
 import Data.Map (Map)
 import qualified Data.Map as Map
 import qualified Data.Stack as Stack
+import Data.Time.Calendar
+import Data.Time.Clock
+import Data.Time.LocalTime
 import Data.Tuple.Map
 import Data.Vector
 
@@ -96,15 +99,14 @@ import Debug.Debugger
 import Space.Cell
 import Space.Space
 
-import System.Cmd (system)
 import System.Directory (canonicalizePath)
 import System.Environment (getEnvironment)
 import System.Exit (exitWith, exitFailure, ExitCode (..))
 import System.FilePath (pathSeparator, takeDirectory, isAbsolute)
 import System.IO (IOMode (..), withFile, hPutStr, hFlush, hGetChar, stdout, stdin)
 import System.IO.Buffering (BufferMode (..), withBuffering)
+import System.Process (system)
 import System.Random (randomRIO)
-import System.Time (CalendarTime (..), getClockTime, toCalendarTime)
 
 import Text.PrettyShow
 
@@ -812,14 +814,11 @@ executeInstr = do
 getSysInfoInstr :: (I i) => Instruction i ()
 getSysInfoInstr = do
   envVars <- liftIO getEnvironment
-  CalendarTime {
-      ctYear = year
-    , ctMonth = month
-    , ctDay = day
-    , ctHour = hour
-    , ctMin = mins
-    , ctSec = sec
-    } <- liftIO $ getClockTime >>= toCalendarTime
+  now <- liftIO getCurrentTime
+  timeZone <- liftIO getCurrentTimeZone
+  let localTime = utcToLocalTime timeZone now
+  let (year, month, day) = toGregorian $ localDay localTime
+  let (TimeOfDay hour mins sec) = localTimeOfDay localTime
   n <- popInstr
   env <- get
   let dim = getDim env
@@ -835,8 +834,8 @@ getSysInfoInstr = do
   {- 19 -} pushVectorInstr $ joinStrs $ progName : args
   {- 18 -} pushVectorInstr $ mkVector $ reverse $ map (fromIntegral . Deque.depth) $ Stack.toList ss
   {- 17 -} pushInstr $ fromIntegral $ Stack.depth ss
-  {- 16 -} pushInstr $ fromIntegral $ hour * 256 * 256 + mins * 256 + sec
-  {- 15 -} pushInstr $ fromIntegral $ (year - 1900) * 256 * 256 + (fromEnum month + 1) * 256 + day
+  {- 16 -} pushInstr $ fromIntegral $ hour * 256 * 256 + mins * 256 + (floor sec)
+  {- 15 -} pushInstr $ fromIntegral $ (year - 1900) * 256 * 256 + (toInteger $ (fromEnum month + 1) * 256 + day)
   {- 14 -} pushVectorInstr $ maxPos - minPos
   {- 13 -} pushVectorInstr minPos
   {- 12 -} pushVectorInstr $ getStorageOffset ip

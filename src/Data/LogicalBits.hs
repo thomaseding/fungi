@@ -15,9 +15,9 @@ toInt = fromIntegral
 fromInt :: (Integral a) => Int -> a
 fromInt = fromIntegral
 
-logicalBit :: (Bits a, Integral a) => Int -> a
+logicalBit :: (Integral a) => Int -> a
 logicalBit = fromInt . bit
 
-testLogicalBit :: (Bits a, Integral a) => a -> Int -> Bool
+testLogicalBit :: (Integral a) => a -> Int -> Bool
 testLogicalBit n = testBit $ toInt n
 
