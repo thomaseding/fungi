@@ -5,6 +5,10 @@ module Fingerprint.HRTI (
 
 import Control.Monad.State.Strict
 
+import Data.Fixed
+import Data.Time.Clock
+import Data.Time.LocalTime
+
 import System.CPUTime
 
 import Env
@@ -26,12 +30,12 @@ semantics = [
   ]
 
 
-ten6 :: Integer
-ten6 = 10 ^ (6 :: Integer)
+secToMicro :: (I i) => Pico -> i
+secToMicro = fromInteger . floor . ((10 ^ (6 :: Integer)) *)
 
 
-toMicro :: (I i) => Integer -> i
-toMicro = fromInteger . (`div` ten6)
+picoToMicro :: (I i) => Integer -> i
+picoToMicro = fromInteger . (`div` (10 ^ (6 :: Integer)))
 
 
 getPicoTime :: IO Integer
@@ -43,7 +47,7 @@ gInstr = do
   t <- liftIO $ do
     a <- getPicoTime
     b <- getPicoTime
-    return $ toMicro $ b - a
+    return $ picoToMicro $ b - a
   pushInstr t
 
 mInstr :: (I i) => Instruction i ()
@@ -58,13 +62,18 @@ tInstr = do
     Nothing -> reverseInstr
     Just past -> do
       now <- liftIO getPicoTime
-      pushInstr $ toMicro $ now - past
+      pushInstr $ picoToMicro $ now - past
 
 eInstr :: (I i) => Instruction i ()
 eInstr = modify $ withIp $ \ip -> ip { hrtiMark = Nothing }
 
 sInstr :: (I i) => Instruction i ()
 sInstr = do
-  pico <- liftIO getPicoTime
-  pushInstr $ fromInteger $ pico `div` ten6
+  now <- liftIO getCurrentTime
+  timeZone <- liftIO getCurrentTimeZone
+  let localTime = utcToLocalTime timeZone now
+  let (TimeOfDay _ _ sec) = localTimeOfDay localTime
+  pushInstr $ secToMicro sec
+
+
 
