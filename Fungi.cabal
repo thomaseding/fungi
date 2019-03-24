@@ -124,7 +124,8 @@ executable Fungi
         Version
 
   -- LANGUAGE extensions used by modules in this package.
-  -- other-extensions:
+  other-extensions:
+        ConstraintKinds
 
   -- Other library packages from which modules are imported.
   build-depends:
