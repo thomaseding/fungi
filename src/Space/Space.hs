@@ -147,7 +147,7 @@ minMaxCoords s = if isPrecise $ conservativeMinMaxCoords s
   else case Map.lookup (unVector cMinPos) m >> Map.lookup (unVector cMaxPos) m of
     Just _ -> (cMinPos, cMaxPos, s)
     Nothing -> let
-      (minPos, maxPos) = Map.foldWithKey f (0, 0) $ spaceMap s
+      (minPos, maxPos) = Map.foldrWithKey f (0, 0) $ spaceMap s
       f k _ z = updateMinMaxCoords z $ mkVector k
       s' = s { conservativeMinMaxCoords = Precise (minPos, maxPos) }
       in (minPos, maxPos, s')
@@ -156,7 +156,7 @@ minMaxCoords s = if isPrecise $ conservativeMinMaxCoords s
     (cMinPos, cMaxPos) = conservativeVal $ conservativeMinMaxCoords s
 
 putSpaceAt :: (Integral i) => Vector i -> Space i -> Space i -> Space i
-putSpaceAt pos baseSpace = Map.foldWithKey f baseSpace . spaceMap
+putSpaceAt pos baseSpace = Map.foldrWithKey f baseSpace . spaceMap
   where
     f pos' cell space = putCell space cell (pos + mkVector pos')
 
